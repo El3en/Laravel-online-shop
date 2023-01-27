@@ -1,44 +1,49 @@
 @extends('layouts.admin')
 @section('content')
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success alert-block">
-            <button type="button" class="close" data-dismiss="alert">×</button>
-            <strong>{{ $message }}</strong>
-        </div>
-    @endif
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th colspan="3">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($products as $product)
-                <tr>
-                    <td>{{ $product['id'] }}</td>
-                    <td>
-                        <img style="width: 12%; height: 12%;" src="{{asset('storage/'.$product->image)}}" />
-                    </td>
-                    <td>{{ $product['name'] }}</td>
-                    <td>{{ $product['category']['name'] }}</td>
-                    <td><a class="btn btn-info" href="{{ url('admin/products/' . $product['id']) }}">Show</a></td>
-                    <td><a class="btn btn-warning" href="{{ url('admin/products/' . $product['id'] . '/edit') }}">Edit</a></td>
-                    <td>
-                        <form action="{{ url('admin/products/' . $product['id']) }}" method="POST">
-                            @method('DELETE')
-                            @csrf
-                            <button onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
+    <h2>Show Product</h2>
+    <label>Name</label>
+    <h5>{{ $product->name }}</h5>
+    <hr>
+    
+    <label>Price</label>
+    <h5>{{ $product->price }}</h5>
+    <hr>
 
-        </tbody>
-    </table>
-    <a class="btn btn-success" href="{{ url('admin/products/create') }}">Add</a>
-    {!! $products->links() !!}
+    <label>Discount</label>
+    <h5>{{ $product->discount }}</h5>
+    <hr>
+    
+    <label>Description</label>
+    <h5>{{ $product->description }}</h5>
+    <hr>
+
+    <label>Rating</label>
+    <h5>{{ $product->rating }}</h5>
+    <hr>
+
+    <label>Rating count</label>
+    <h5>{{ $product->rating_count }}</h5>
+    <hr>
+    
+    <label>Category</label>
+    <h5>{{ $product->category->name }}</h5>
+    <hr>
+
+    <label>Size</label>
+    <h5>{{ $product->size->name }}</h5>
+    <hr>
+    
+    <label>Color</label>
+    <h5>{{ $product->color->name }}</h5>
+    <hr>
+
+    <label>Tag</label>
+    <h5>{{ $product->tag->name }}</h5>
+    <hr>
+    
+    <label>Image</label>
+    <img style="width: 12%; height: 12%" src="{{ asset('storage/' . $product->image) }}" />
+    <hr>
+    <br/>
+    <a class="btn btn-secondary" href="{{ url('admin/products') }}">Back</a>
 @endsection
