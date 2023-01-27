@@ -6,11 +6,11 @@
             <strong>{{ $message }}</strong>
         </div>
     @endif
-    <a class="btn btn-success" href="{{ url('admin/products/create') }}">Add</a>
-    <table class="table table-bordered">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Image</th>
                 <th>Name</th>
                 <th>Category</th>
                 <th colspan="3">Actions</th>
@@ -20,10 +20,13 @@
             @foreach ($products as $product)
                 <tr>
                     <td>{{ $product['id'] }}</td>
+                    <td>
+                        <img style="width: 12%; height: 12%;" src="{{asset('storage/'.$product->image)}}" />
+                    </td>
                     <td>{{ $product['name'] }}</td>
                     <td>{{ $product['category']['name'] }}</td>
-                    <td><a href="{{ url('admin/products/' . $product['id']) }}">Show</a></td>
-                    <td><a href="{{ url('admin/products/' . $product['id'] . '/edit') }}">Edit</a></td>
+                    <td><a class="btn btn-info" href="{{ url('admin/products/' . $product['id']) }}">Show</a></td>
+                    <td><a class="btn btn-warning" href="{{ url('admin/products/' . $product['id'] . '/edit') }}">Edit</a></td>
                     <td>
                         <form action="{{ url('admin/products/' . $product['id']) }}" method="POST">
                             @method('DELETE')
@@ -36,5 +39,6 @@
 
         </tbody>
     </table>
+    <a class="btn btn-success" href="{{ url('admin/products/create') }}">Add</a>
     {!! $products->links() !!}
 @endsection
