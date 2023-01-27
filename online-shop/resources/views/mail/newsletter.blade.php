@@ -9,11 +9,8 @@
 </head>
 
 <body>
-    <h3 style="color:blue">{{ $data['name'] }}</h3>
     <h3 style="color:blue">{{ $data['email'] }}</h3>
-    <h3 style="color:blue">{{ $data['subject'] }}</h3>
-    <p>{{ $data['message_text'] }}</p>
-    Thank you for your support.
+    Thank you for subscribing to our newsletter.
 </body>
 
 </html>
