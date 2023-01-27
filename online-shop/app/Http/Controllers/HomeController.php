@@ -77,10 +77,109 @@ class HomeController extends Controller
     function add_product(Request $request)
     {
         if ($request->has('id')) {
+            $map = Session::get('map', []);
             $ids = Session::get('ids', []);
             array_push($ids, $request->get('id'));
+            if (array_key_exists($request->get('id'), $map))
+                $map[$request->get('id')] += 1;
+            else{
+                array_push($map, $request->get('id'));
+                $map[$request->get('id')] = 1;
+            }
             Session::put('ids', $ids);
-            return response()->json(count($ids));
+            Session::put('map', $map);
+            return response()->json('Data addedd successfully');
+        }
+        return abort(404);
+    }
+
+    function add_likes(Request $request)
+    {
+        if ($request->has('id')) {
+            $likes = Session::get('likes', []);
+            array_push($likes, $request->get('id'));
+            Session::put('likes', $likes);
+            return response()->json('Data addedd successfully');
+        }
+        return abort(404);
+    }
+
+    //Checkout and Cart Functions
+
+    function checkout($id){
+        $orderDetailID = (int)$id;
+        $productsMap = Session::get('map',[]);
+        $products = [];
+        $subTotal = 0;
+        $shipping = 0;
+        foreach(array_keys($productsMap) as $id){
+            if(Product::find($id)){
+                $product = Product::find($id);
+                array_push($products, $product);
+                $shipping += 10;
+                $subTotal += ($product['price'] - $product['price'] * $product['discount']) * $productsMap[$product['id']];
+            }
+        }
+        $total = $subTotal + $shipping;
+        return view('checkout',compact('products','productsMap','subTotal','shipping','total','orderDetailID'));
+    }
+
+    function cart(){
+        $productsMap = Session::get('map',[]);
+        $products = [];
+        $subTotal = 0;
+        $shipping = 0;
+        foreach(array_keys($productsMap) as $id){
+            if(Product::find($id)){
+                $product = Product::find($id);
+                array_push($products, $product);
+                $shipping += 10;
+                $subTotal += ($product['price'] - $product['price'] * $product['discount']) * $productsMap[$product['id']];
+            }
+        }
+        $total = $subTotal + $shipping;
+        return view('cart',compact('products','productsMap','subTotal','shipping','total'));
+    }
+
+    function incQuantity(Request $request){
+        if($request->has('id')){
+            $map = Session::get('map', []);
+            $ids = Session::get('ids', []);
+            array_push($ids, $request->get('id'));
+            $map[$request->get('id')] += 1;
+            Session::put('ids', $ids);
+            Session::put('map', $map);
+            return response()->json("Product Quantity Inc");
+        }
+        return abort(404);
+    }
+
+    function decQuantity(Request $request){
+        if($request->has('id')){
+            $map = Session::get('map', []);
+            $ids = Session::get('ids', []);
+            if($map[$request->get('id')] > 1){
+                $map[$request->get('id')] -= 1;
+                array_pop($ids);
+                Session::put('ids', $ids);
+                Session::put('map', $map);
+                return response()->json("Product Quantity Dec");
+            }
+        }
+        return abort(404);
+    }
+
+    function remove(Request $request){
+        if($request->has('id')){
+            $map = Session::get('map', []);
+            $ids = Session::get('ids', []);
+            unset($map[$request->get('id')]);
+            foreach(array_keys($ids,$request->get('id')) as $key){
+                unset($ids[$key]);
+            }
+            Session::put('ids', $ids);
+            Session::put('map', $map);
+            return response()->json("Product Removed");
         }
         return abort(404);
     }
