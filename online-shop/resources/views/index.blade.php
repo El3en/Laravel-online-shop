@@ -134,7 +134,7 @@
                             </div>
                             <div class="flex-fill pl-3">
                                 <h6>{{ $category['name'] }}</h6>
-                                <small class="text-body">{{$category['products']->count()}} Products</small>
+                                <small class="text-body">{{ $category['products']->count() }} Products</small>
                             </div>
                         </div>
                     </a>
@@ -158,9 +158,11 @@
                                 <img class="img-fluid w-100" src="{{ asset('storage/' . $product['image']) }}"
                                     alt="" />
                                 <div class="product-action">
-                                    <a class="btn btn-outline-dark btn-square" href="#"><i
+                                    <a class="btn btn-outline-dark btn-square"
+                                        onclick="addProductToSession({{ $product['id'] }})" href=""><i
                                             class="fa fa-shopping-cart"></i></a>
-                                    <a class="btn btn-outline-dark btn-square" href="#"><i
+                                    <a class="btn btn-outline-dark btn-square"
+                                        onclick="addLikeToSession({{ $product['id'] }})" href=""><i
                                             class="far fa-heart"></i></a>
                                     <a class="btn btn-outline-dark btn-square" href="#"><i
                                             class="fa fa-sync-alt"></i></a>
@@ -169,18 +171,15 @@
                                 </div>
                             </div>
                             <div class="text-center py-4">
-                                <a class="h6 text-decoration-none text-truncate" href="">{{ $product['name'] }}</a>
+                                <a class="h6 text-decoration-none text-truncate"
+                                    href="{{ url('product-detail/' . $product['id']) }}">{{ $product['name'] }}</a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
                                     <h5>${{ $product->getPrice() }}</h5>
                                     <h6 class="text-muted ml-2"><del>${{ $product['price'] }}</del></h6>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-center mb-1">
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small>(99)</small>
+                                    @include('partials.starsProduct')
+                                    <small>({{ $product->rating_count }})</small>
                                 </div>
                             </div>
                         </div>
@@ -225,42 +224,41 @@
         </h2>
         <div class="row px-xl-5">
             @foreach ($products as $product)
-            @if ($product['is_recent'])
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                    <div class="product-item bg-light mb-4">
-                        <div class="product-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="{{ asset('storage/' . $product['image']) }}"
-                                alt="" />
-                            <div class="product-action">
-                                <a class="btn btn-outline-dark btn-square" href="#"><i
-                                        class="fa fa-shopping-cart"></i></a>
-                                <a class="btn btn-outline-dark btn-square" href="#"><i
-                                        class="far fa-heart"></i></a>
-                                <a class="btn btn-outline-dark btn-square" href="#"><i
-                                        class="fa fa-sync-alt"></i></a>
-                                <a class="btn btn-outline-dark btn-square" href="#"><i
-                                        class="fa fa-search"></i></a>
+                @if ($product['is_recent'])
+                    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="{{ asset('storage/' . $product['image']) }}"
+                                    alt="" />
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square"
+                                        onclick="addProductToSession({{ $product['id'] }})" href=""><i
+                                            class="fa fa-shopping-cart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square"
+                                        onclick="addLikeToSession({{ $product['id'] }})" href=""><i
+                                            class="far fa-heart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" href="#"><i
+                                            class="fa fa-sync-alt"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" href="#"><i
+                                            class="fa fa-search"></i></a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="text-center py-4">
-                            <a class="h6 text-decoration-none text-truncate" href="">{{ $product['name'] }}</a>
-                            <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5>${{ $product->getPrice() }}</h5>
-                                <h6 class="text-muted ml-2"><del>${{ $product['price'] }}</del></h6>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-center mb-1">
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small>(99)</small>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate"
+                                    href="">{{ $product['name'] }}</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>${{ $product->getPrice() }}</h5>
+                                    <h6 class="text-muted ml-2"><del>${{ $product['price'] }}</del></h6>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    @include('partials.starsProduct')
+                                    <small>({{ $product->rating_count }})</small>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endif
-        @endforeach
+                @endif
+            @endforeach
         </div>
     </div>
     <!-- Products End -->
@@ -299,4 +297,32 @@
         </div>
     </div>
     <!-- Vendor End -->
+@endsection
+
+@section('scripts')
+    <script>
+        function addProductToSession(id) {
+            $.ajax({
+                url: '{{ url('/add-product') }}',
+                data: {
+                    id: id
+                },
+                success: (data) => {
+                    $('#product_count').html(data);
+                }
+            })
+        }
+
+        function addLikeToSession(id) {
+            $.ajax({
+                url: '{{ url('/add-likes') }}',
+                data: {
+                    id: id
+                },
+                success: (data) => {
+                    $('#product_count').html(data);
+                }
+            })
+        }
+    </script>
 @endsection
