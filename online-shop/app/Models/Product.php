@@ -14,7 +14,9 @@ class Product extends Model
         'color_id' => 'required',
         'category_id' => 'required'
     ];
-    protected $guarded = ['rating', 'rating_count'];
+    public $timestamps = false;
+
+    protected $guarded = ['rating', 'rating_count', 'tag_id'];
 
     public function getPrice()
     {
@@ -33,5 +35,13 @@ class Product extends Model
     public function color()
     {
         return $this->belongsTo(Color::class);
+    }
+    public function tag()
+    {
+        return $this->belongsTo(Tag::class);
+    }
+    public function review()
+    {
+        return $this->hasMany(Review::class);
     }
 }
