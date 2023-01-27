@@ -23,6 +23,7 @@
         @error('image')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
+        <br />
         <label>Category</label>
         <select class="form-control" name="category_id">
             <option>Select Category</option>
@@ -50,6 +51,15 @@
             @endforeach
         </select>
 
+        <label>Tags</label>
+        <select class="form-control" name="tag_id">
+            <option>Select Tag</option>
+            @foreach ($tags as $tag)
+                <option value="{{ $tag->id }}" {{ old('tag_id') == $tag['id'] ? 'selected' : '' }}>{{ $tag->name }}
+                </option>
+            @endforeach
+        </select>
+        <br />
         <button class="btn btn-primary">Add</button>
         <a class="btn btn-secondary" href="{{ url('admin/products') }}">Cancel</a>
     </form>
