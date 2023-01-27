@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,48 +41,28 @@
             </div>
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center">
-                    @guest
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
-                                Hello Guest
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="{{ url('/login') }}" style="btn">
-                                    <button class="dropdown-item" type="button">Sign in</button>
-                                </a>
-                                <a href="{{ url('/register') }}" style="btn">
-                                    <button class="dropdown-item" type="button">Sign up</button>
-                                </a>
-                            </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+                            Hello Guest
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="{{url('/login')}}" style="btn">
+                                <button class="dropdown-item" type="button">Sign in</button>
+                            </a>
+                            <a href="{{url('/register')}}" style="btn">
+                                <button class="dropdown-item" type="button">Sign up</button>
+                            </a>
+                            <a href="{{url('/profile')}}" style="btn">
+                                <button class="dropdown-item" type="button">My Profile</button>
+                            </a>
+                            <form method="POST" action="http://127.0.0.1:8000/logout">
+                                @csrf
+                                <input type="hidden" name="_token" value="eO7vBLLkRSFyWM3DaZhkxkNkWY3N310TZuYyBgJR">
+                                <a class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" href="http://127.0.0.1:8000/logout" style="color: Black;" onclick="event.preventDefault();
+                                                    this.closest('form').submit();">Log Out</a>
+                            </form>
                         </div>
-                    @endguest
-
-                    @auth
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
-                                Hello {{ auth()->user()->name }}
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="{{ url('/admin/home') }}" style="btn">
-                                    <button class="dropdown-item" type="button">Admin</button>
-                                </a>
-                                <a href="{{ url('/dashboard') }}" style="btn">
-                                    <button class="dropdown-item" type="button">Dashboard</button>
-                                </a>
-                                <a href="{{ url('/profile') }}" style="btn">
-                                    <button class="dropdown-item" type="button">My Profile</button>
-                                </a>
-                                <form method="POST" action="http://127.0.0.1:8000/logout">
-                                    @csrf
-                                    <a class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
-                                        href="http://127.0.0.1:8000/logout" style="color: Black;"
-                                        onclick="event.preventDefault();
-                                                    this.closest('form').submit();">Log
-                                        Out</a>
-                                </form>
-                            </div>
-                        </div>
-                    @endauth
+                    </div>
                     <div class="btn-group mx-2">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
                             USD
@@ -107,9 +88,9 @@
                     <a href="" class="btn px-0 ml-2">
                         <i class="fas fa-heart text-dark"></i>
                         <span class="badge text-dark border border-dark rounded-circle"
-                            style="padding-bottom: 2px">{{ count(session()->get('likes', [])) }}</span>
+                            style="padding-bottom: 2px">0</span>
                     </a>
-                    <a href="/cart" class="btn px-0 ml-2">
+                    <a href="" class="btn px-0 ml-2">
                         <i class="fas fa-shopping-cart text-dark"></i>
                         <span class="badge text-dark border border-dark rounded-circle"
                             style="padding-bottom: 2px">{{ count(session()->get('ids', [])) }}</span>
@@ -178,26 +159,23 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="{{ url('') }}"
-                                class="nav-item nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
-                            <a href="{{ url('shop') }}"
-                                class="nav-item nav-link {{ request()->segment(1) == 'shop' || request()->segment(1) == 'product-detail' ? 'active' : '' }}">Shop</a>
-                            <a href="{{ url('cart') }}"
-                                class="nav-item nav-link {{ request()->segment(1) == 'cart' ? 'active' : '' }}">Cart</a>
-                            <a href="{{ url('contact') }}"
-                                class="nav-item nav-link {{ request()->segment(1) == 'contact' ? 'active' : '' }}">Contact</a>
+                            <a href="{{ url('') }}" class="nav-item nav-link active">Home</a>
+                            <a href="{{ url('shop') }}" class="nav-item nav-link">Shop</a>
+                            <a href="{{ url('cart') }}" class="nav-item nav-link">Cart</a>
+                            <a href="{{ url('checkout') }}" class="nav-item nav-link">Checkout</a>
+                            <a href="{{ url('contact') }}" class="nav-item nav-link">Contact</a>
+                            <a href="{{ url('admin') }}" class="nav-item nav-link">Admin</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                             <a href="" class="btn px-0">
                                 <i class="fas fa-heart text-primary"></i>
                                 <span class="badge text-secondary border border-secondary rounded-circle"
-                                    style="padding-bottom: 2px"id="product_count">{{ count(session()->get('likes', [])) }}</span>
+                                    style="padding-bottom: 2px">0</span>
                             </a>
-                            <a href="/cart" class="btn px-0 ml-3">
+                            <a href="" class="btn px-0 ml-3">
                                 <i class="fas fa-shopping-cart text-primary"></i>
                                 <span class="badge text-secondary border border-secondary rounded-circle"
-                                    style="padding-bottom: 2px"
-                                    id="product_count">{{ count(session()->get('ids', [])) }}</span>
+                                    style="padding-bottom: 2px" id="product_count">{{ count(session()->get('ids', [])) }}</span>
                             </a>
                         </div>
                     </div>
@@ -238,6 +216,8 @@
                                     class="fa fa-angle-right mr-2"></i>Home</a>
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our
                                 Shop</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop
+                                Detail</a>
                             <a class="text-secondary mb-2" href="#"><i
                                     class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
                             <a class="text-secondary mb-2" href="#"><i
@@ -253,6 +233,8 @@
                                     class="fa fa-angle-right mr-2"></i>Home</a>
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our
                                 Shop</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop
+                                Detail</a>
                             <a class="text-secondary mb-2" href="#"><i
                                     class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
                             <a class="text-secondary mb-2" href="#"><i
@@ -263,15 +245,10 @@
                     </div>
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Newsletter</h5>
-                        <p>Subscribe to our Newsletter by entering your email below!</p>
-                        <form method="POST" action="{{ url('/newsletter') }}">
-                            @csrf
+                        <p>Duo stet tempor ipsum sit amet magna ipsum tempor est</p>
+                        <form action="">
                             <div class="input-group">
-                                <input type="text" name="email" class="form-control"
-                                    placeholder="Your Email Address" required="required" value="{{old('email')}}" />
-                                @error('name')
-                                    <p class="help-block text-danger">{{ $message }}</p>
-                                @enderror
+                                <input type="text" class="form-control" placeholder="Your Email Address" />
                                 <div class="input-group-append">
                                     <button class="btn btn-primary">Sign Up</button>
                                 </div>
